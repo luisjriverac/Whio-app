@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Whio - Conecta con el mundo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos base */
+        body { margin: 0; font-family: sans-serif; background: #e5ddd5; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .app { width: 100vw; height: 100vh; background: #fff; display: flex; overflow: hidden; position: relative; }
+        
+        /* Pantalla Login/Registro */
+        #login-screen { position: absolute; width: 100%; height: 100%; background: #00a884; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; color: white; }
+        #login-screen input { padding: 15px; margin: 10px; border-radius: 5px; border: none; width: 250px; }
+        #login-screen button { padding: 15px 30px; background: #25d366; border: none; color: white; cursor: pointer; border-radius: 5px; font-weight: bold; }
+
+        /* Interfaz Chat */
+        .sidebar { width: 350px; border-right: 1px solid #ccc; display: flex; flex-direction: column; }
+        .chat-view { flex: 1; display: flex; flex-direction: column; background: #e5ddd5; }
+        .header { background: #f0f2f5; padding: 15px; display: flex; align-items: center; font-weight: bold; }
+        .msg-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        .input-area { background: #f0f2f5; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .input-area input { flex: 1; padding: 12px; border-radius: 20px; border: none; outline: none; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <h1>Bienvenido a Whio</h1>
+    <input type="text" id="user" placeholder="Nombre de usuario">
+    <input type="password" id="pass" placeholder="Clave">
+    <button onclick="registrar()">Registrar / Entrar en Whio</button>
+</div>
+
+<div class="app" id="main-app" style="display:none;">
+    <div class="sidebar">
+        <div class="header">Chats Whio</div>
+        <div style="padding:10px; cursor:pointer;" onclick="abrirChat()">Chat con Soporte Whio</div>
+    </div>
+    <div class="chat-view">
+        <div class="header" id="chat-title">Selecciona un chat</div>
+        <div class="msg-area" id="msgs"></div>
+        <div class="input-area">
+            <i class="fa fa-paperclip" onclick="document.getElementById('file').click()"></i>
+            <input type="file" id="file" style="display:none" onchange="adjuntar()">
+            <input type="text" id="msg-text" placeholder="Escribe un mensaje" oninput="cambiarIcono()">
+            <i id="action-icon" class="fa fa-microphone" onclick="accionPrincipal()"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    function registrar() {
+        const user = document.getElementById('user').value;
+        if(user) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+        }
+    }
+
+    function cambiarIcono() {
+        const icon = document.getElementById('action-icon');
+        const text = document.getElementById('msg-text').value;
+        icon.className = text.length > 0 ? "fa fa-paper-plane" : "fa fa-microphone";
+    }
+
+    function accionPrincipal() {
+        const input = document.getElementById('msg-text');
+        if(input.value.length > 0) {
+            const div = document.createElement('div');
+            div.innerHTML = input.value;
+            div.style.alignSelf = 'flex-end';
+            div.style.background = '#dcf8c6';
+            div.style.padding = '8px';
+            div.style.borderRadius = '5px';
+            div.style.margin = '5px';
+            document.getElementById('msgs').appendChild(div);
+            input.value = '';
+            cambiarIcono();
+        } else {
+            alert("Grabando nota de voz en Whio...");
+        }
+    }
+
+    function adjuntar() {
+        alert("Archivo adjuntado correctamente en Whio");
+    }
+
+    function abrirChat() {
+        document.getElementById('chat-title').innerText = "Soporte Whio";
+    }
+</script>
+</body>
+</html>
